@@ -1,3 +1,9 @@
+enum Filter {
+  all,
+  active,
+  completed,
+}
+
 class TodoModel{
   final String id;
   final String desc;
