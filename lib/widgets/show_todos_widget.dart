@@ -4,7 +4,7 @@ import 'package:todo_app_cubit/cubits/cubit/todo_list_cubit.dart';
 import 'package:todo_app_cubit/widgets/todo_item_widget.dart';
 
 class ShowTodosWidget extends StatelessWidget {
-const ShowTodosWidget({ Key? key }) : super(key: key);
+const ShowTodosWidget({ super.key });
 
   @override
   Widget build(BuildContext context){
