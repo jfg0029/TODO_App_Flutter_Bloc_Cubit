@@ -11,14 +11,25 @@ class ShowTodosWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final todos = context.watch<FilteredTodosCubit>().state.filteredTodos;
-    return BlocListener<TodoFilterCubit, TodoFilterState>(
-      listener: (context, state) {
-        context.read<FilteredTodosCubit>().setFilteredTodos(
-          state.filter,
-          context.read<TodoListCubit>().state.todos,
-          
-        );
-      },
+    return MultiBlocListener(
+      listeners: [
+        BlocListener<TodoFilterCubit, TodoFilterState>(
+          listener: (context, state) {
+            context.read<FilteredTodosCubit>().setFilteredTodos(
+              state.filter,
+              context.read<TodoListCubit>().state.todos,
+            );
+          },
+        ),
+        BlocListener<TodoListCubit, TodoListState>(
+          listener: (context, state) {
+            context.read<FilteredTodosCubit>().setFilteredTodos(
+              context.read<TodoFilterCubit>().state.filter,
+              state.todos,
+            );
+          },
+        ),
+      ],
       child: ListView.separated(
         shrinkWrap: true,
         separatorBuilder: (BuildContext context, int index) {
