@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:todo_app_cubit/cubits/cubit/filtered_todos_cubit.dart';
-import 'package:todo_app_cubit/cubits/cubit/todo_filter_cubit.dart';
-import 'package:todo_app_cubit/cubits/cubit/todo_list_cubit.dart';
+import 'package:todo_app_cubit/blocs/filtered_todos/filtered_todos_bloc.dart';
+import 'package:todo_app_cubit/blocs/todo_filter/todo_filter_bloc.dart';
+import 'package:todo_app_cubit/blocs/todo_list/todo_list_bloc.dart';
 import 'package:todo_app_cubit/pages/home_screen.dart';
 
 void main() => runApp(const MyApp());
@@ -14,9 +14,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider<TodoListCubit>(create: (context) => TodoListCubit()),
-        BlocProvider<TodoFilterCubit>(create: (context) => TodoFilterCubit()),
-        BlocProvider<FilteredTodosCubit>(create: (context) => FilteredTodosCubit()),
+        BlocProvider<TodoListBloc>(create: (context) => TodoListBloc()),
+        BlocProvider<TodoFilterBloc>(create: (context) => TodoFilterBloc()),
+        BlocProvider<FilteredTodosBloc>(create: (context) => FilteredTodosBloc(initialTodos: context.read<TodoListBloc>().state.todos,
+        )),
       ],
       child: MaterialApp(title: 'Material App', home: HomeScreen()),
     );

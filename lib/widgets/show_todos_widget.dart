@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:todo_app_cubit/cubits/cubit/filtered_todos_cubit.dart';
-import 'package:todo_app_cubit/cubits/cubit/todo_filter_cubit.dart';
-import 'package:todo_app_cubit/cubits/cubit/todo_list_cubit.dart';
+import 'package:todo_app_cubit/blocs/filtered_todos/filtered_todos_bloc.dart';
+import 'package:todo_app_cubit/blocs/todo_filter/todo_filter_bloc.dart';
+import 'package:todo_app_cubit/blocs/todo_list/todo_list_bloc.dart';
+import 'package:todo_app_cubit/utils/todos_utils.dart';
+
 import 'package:todo_app_cubit/widgets/todo_item_widget.dart';
 
 class ShowTodosWidget extends StatelessWidget {
@@ -10,22 +12,28 @@ class ShowTodosWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final todos = context.watch<FilteredTodosCubit>().state.filteredTodos;
+    final todos = context.watch<FilteredTodosBloc>().state.filteredTodos;
     return MultiBlocListener(
       listeners: [
-        BlocListener<TodoFilterCubit, TodoFilterState>(
+        BlocListener<TodoFilterBloc, TodoFilterState>(
           listener: (context, state) {
-            context.read<FilteredTodosCubit>().setFilteredTodos(
+            final filteredTodos = TodosUtils().setFilteredTodos(
               state.filter,
-              context.read<TodoListCubit>().state.todos,
+              context.read<TodoListBloc>().state.todos,
+            );
+            context.read<FilteredTodosBloc>().add(
+              CalculateFilteredTodosEvent(filteredTodos: filteredTodos),
             );
           },
         ),
-        BlocListener<TodoListCubit, TodoListState>(
+        BlocListener<TodoListBloc, TodoListState>(
           listener: (context, state) {
-            context.read<FilteredTodosCubit>().setFilteredTodos(
-              context.read<TodoFilterCubit>().state.filter,
-              state.todos,
+            final filteredTodos = TodosUtils().setFilteredTodos(
+              context.read<TodoFilterBloc>().state.filter, state.todos,
+            );
+
+            context.read<FilteredTodosBloc>().add(
+              CalculateFilteredTodosEvent(filteredTodos: filteredTodos),
             );
           },
         ),

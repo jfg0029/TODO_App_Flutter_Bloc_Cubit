@@ -1,4 +1,4 @@
-part of 'todo_list_cubit.dart';
+part of 'todo_list_bloc.dart';
 
 class TodoListState {
   final List<TodoModel> todos;

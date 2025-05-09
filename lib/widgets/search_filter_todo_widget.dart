@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:todo_app_cubit/cubits/cubit/todo_filter_cubit.dart';
+import 'package:todo_app_cubit/blocs/todo_filter/todo_filter_bloc.dart';
 import 'package:todo_app_cubit/models/todo_model.dart';
 
 class SearchFilterTodoWidget extends StatelessWidget {
-  const SearchFilterTodoWidget({Key? key}) : super(key: key);
+  const SearchFilterTodoWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +25,7 @@ class SearchFilterTodoWidget extends StatelessWidget {
   Widget filterButton(BuildContext context, Filter filter) {
     return TextButton(
       onPressed: () {
-        context.read<TodoFilterCubit>().changeFilter(filter);
+        context.read<TodoFilterBloc>().add(ChangeFilterEvent(newFilter: filter));
       },
       child: Text(
         filter == Filter.all
@@ -43,7 +43,7 @@ class SearchFilterTodoWidget extends StatelessWidget {
   }
 
   Color textColor(BuildContext context, Filter filter){
-    final currentFilter = context.watch<TodoFilterCubit>().state.filter;
+    final currentFilter = context.watch<TodoFilterBloc>().state.filter;
 
     return currentFilter == filter ? Colors.blue : Colors.grey;
   }
